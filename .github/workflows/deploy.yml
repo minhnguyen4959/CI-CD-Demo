@@ -3,7 +3,7 @@ name: Deploy HTML to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main # Chạy workflow khi có push lên nhánh main
 
 jobs:
   deploy:
