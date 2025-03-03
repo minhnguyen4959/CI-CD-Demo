@@ -4,8 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CI/CD Demo</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Xin chào!  🚀</h1>
+    <nav>
+        <ul>
+            <li><a href="#" onclick="showPage('home')">Home</a></li>
+            <li><a href="#" onclick="showPage('about')">About</a></li>
+            <li><a href="#" onclick="showPage('services')">Services</a></li>
+            <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <section id="home" class="page active">
+            <h1>🏠 Welcome to Home Page</h1>
+            <p>Đây là trang chủ của demo CI/CD.</p>
+        </section>
+
+        <section id="about" class="page">
+            <h1>ℹ️ About Us</h1>
+            <p>Chúng tôi cung cấp dịch vụ CI/CD chất lượng.</p>
+        </section>
+
+        <section id="services" class="page">
+            <h1>🛠️ Our Services</h1>
+            <p>Chúng tôi cung cấp DevOps, Cloud và CI/CD Pipeline.</p>
+        </section>
+
+        <section id="contact" class="page">
+            <h1>📞 Contact Us</h1>
+            <p>Liên hệ với chúng tôi qua email: contact@example.com</p>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
