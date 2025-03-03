@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mysql from "mysql2/promise";
+import swaggerJsDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 dotenv.config();
 
@@ -29,6 +31,32 @@ const queryDB = async (query, params = []) => {
     }
 };
 
+// Swagger setup
+const swaggerOptions = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "User API",
+            version: "1.0.0",
+            description: "API for managing users"
+        },
+        servers: [{ url: "http://localhost:5000" }]
+    },
+    apis: ["./server.js"]
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Get all users
+ *     responses:
+ *       200:
+ *         description: Success
+ */
 app.get("/api/users", async (req, res) => {
     try {
         const users = await queryDB("SELECT * FROM users");
@@ -38,6 +66,28 @@ app.get("/api/users", async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/users:
+ *   post:
+ *     summary: Create a new user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               age:
+ *                 type: integer
+ *     responses:
+ *       201:
+ *         description: User created
+ */
 app.post("/api/users", async (req, res) => {
     const { name, email, age } = req.body;
     try {
@@ -48,30 +98,6 @@ app.post("/api/users", async (req, res) => {
         res.status(201).json({ id: result.insertId, name, email, age });
     } catch (error) {
         res.status(400).json({ message: error.message });
-    }
-});
-
-app.put("/api/users/:id", async (req, res) => {
-    const { id } = req.params;
-    const { name, email, age } = req.body;
-    try {
-        await queryDB(
-            "UPDATE users SET name=?, email=?, age=? WHERE id=?",
-            [name, email, age, id]
-        );
-        res.json({ id, name, email, age });
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
-
-app.delete("/api/users/:id", async (req, res) => {
-    const { id } = req.params;
-    try {
-        await queryDB("DELETE FROM users WHERE id=?", [id]);
-        res.json({ message: "User deleted successfully" });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
     }
 });
 
