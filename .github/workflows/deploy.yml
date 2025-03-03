@@ -3,18 +3,31 @@ name: Deploy HTML to GitHub Pages
 on:
   push:
     branches:
-      - main # Chạy workflow khi có push lên nhánh main
+      - main  # Kích hoạt workflow khi có push lên nhánh main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Sử dụng máy ảo Ubuntu để chạy CI/CD
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # Lấy code từ repository
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3  # Cấu hình môi trường Node.js
+        with:
+          node-version: 16  # Sử dụng Node.js phiên bản 16 (có thể thay đổi nếu cần)
+
+      - name: Install Dependencies
+        run: npm install  # Cài đặt các package nếu có
+
+      - name: Build Project
+        run: |
+          echo "Không có bước build vì đây là dự án tĩnh."
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-main@v3
+        uses: peaceiris/actions-gh-pages@v3  # Hành động deploy lên GitHub Pages
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Token GitHub để cấp quyền deploy
+          publish_dir: ./  # Chỉ định thư mục để deploy (ở đây là root của repo)
+          publish_branch: gh-pages  # Tạo nhánh `gh-pages` để lưu code của GitHub Pages
